@@ -1,18 +1,23 @@
-import React,{useState,FormEvent} from 'react'
+import React,{useState,FormEvent, useContext} from 'react'
 import { Segment, Form, Button } from 'semantic-ui-react'
 import { IActivity } from '../../../app/models/Activity'
 import {v4 as uuid} from 'uuid';
+import ActivityStore from'../../../app/stores/activityStore'
+import { observer } from 'mobx-react-lite';
 interface IProps{
    
-    setEditMode:(editMode:boolean)=>void;
+   /* setEditMode:(editMode:boolean)=>void;*/
     selectedActivity:IActivity;
-    handelEditActivities:(activity: IActivity)=>void;
-    handelCreateActivity:(activity: IActivity)=>void;
-    submitting:boolean
-  }
-const ActivityForm:React.FC<IProps> = ({setEditMode,selectedActivity, handelCreateActivity,
-    handelEditActivities,submitting}) => {
+   /* handelEditActivities:(activity: IActivity)=>void;*/
+    
    
+  }
+const ActivityForm:React.FC<IProps> = ({selectedActivity,
+   /* handelEditActivitiessubmitting*/}) => {
+   
+        const activityStore = useContext(ActivityStore);
+        const{createActivity,editActivity,submitting,cancelFormOpen} = activityStore;
+
     const initializeForm = () => {
         if(selectedActivity)
         {
@@ -43,11 +48,11 @@ const handelSubmit=()=>{
       let newActivity={
           ...activity,id:uuid()
       }
-      handelCreateActivity(newActivity);
+      createActivity(newActivity);
 
    }
    else{
-    handelEditActivities(activity);
+    editActivity(activity);
    }
 }
 
@@ -61,7 +66,7 @@ const handelSubmit=()=>{
                <Form.Input placeholder='City' value={activity.city} name='city' onChange={handelInputChange}/>
                <Form.Input placeholder='Venue'value={activity.venue} name='venue' onChange={handelInputChange}/>
                <Button loading={submitting} floated='right' positive type='submit' content='Submit'/>
-               <Button floated='right'  type='button' content='Cancel' onClick={()=>setEditMode(false)}/>
+               <Button floated='right'  type='button' content='Cancel' onClick={cancelFormOpen}/>
 
                
            </Form>
@@ -69,4 +74,4 @@ const handelSubmit=()=>{
     )
 }
 
-export default ActivityForm
+export default observer(ActivityForm) ;

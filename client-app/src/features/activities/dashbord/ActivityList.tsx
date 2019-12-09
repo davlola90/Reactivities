@@ -1,20 +1,23 @@
-import React, { SyntheticEvent } from 'react'
-import { IActivity } from '../../../app/models/Activity'
+import React, { useContext } from 'react'
+
 import {  Item, Button, Label, Segment } from 'semantic-ui-react'
+import { observer } from 'mobx-react-lite'
+import ActivityStore from'../../../app/stores/activityStore';
 
-
-interface IProps{
-    activities:IActivity[],
-    selectActivity:(id:string)=>void;
+/*interface IProps{
+   
     handelDeleteActivities:(event:SyntheticEvent<HTMLButtonElement> ,id:string)=>void;
     submitting:boolean;
     target:string;
-}
-const ActivityList: React.FC<IProps> = ({activities,selectActivity,handelDeleteActivities,submitting,target}) => {
+}*/
+const ActivityList: React.FC = ({/*handelDeleteActivities,submitting,target*/}) => {
+  const activityStore = useContext(ActivityStore);
+  const {activitiesByDate,selectActivity,deleteActivity,submitting,target}=activityStore;
+
     return (
         <Segment clearing>
         <Item.Group divided>
-            {activities.map(activity =>(
+            {activitiesByDate.map(activity =>(
                <Item key={activity.id}>
       
                <Item.Content>
@@ -26,7 +29,7 @@ const ActivityList: React.FC<IProps> = ({activities,selectActivity,handelDeleteA
                  </Item.Description>
                  <Item.Extra>
                      <Button   onClick={(e)=>selectActivity(activity.id)} floated='right' content='View' color='blue'/>
-                     <Button  name={activity.id} loading={target===activity.id&&submitting} onClick={(e)=>handelDeleteActivities(e,activity.id)} floated='right' content='Delete' color='red'/>
+                     <Button  name={activity.id} loading={target===activity.id&&submitting} onClick={(e)=>deleteActivity(e,activity.id)} floated='right' content='Delete' color='red'/>
                      <Label basic content={activity.category}/>
                  </Item.Extra>
                </Item.Content>
@@ -38,4 +41,4 @@ const ActivityList: React.FC<IProps> = ({activities,selectActivity,handelDeleteA
     )
 }
 
-export default ActivityList
+export default observer(ActivityList) ;
