@@ -1,29 +1,36 @@
-import React, {  useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Grid} from 'semantic-ui-react'
 
 import ActivityList from './ActivityList'
-import ActivityDetails from '../Details/ActivityDetails'
-import ActivityForm from '../form/ActivityForm'
+
 import { observer } from 'mobx-react-lite'
-import ActivityStore from '../../../app/stores/activityStore';
+
+import ActivityStore from '../../../app/stores/activityStore'
+import LoadingCompenent from '../../../app/layout/LoadingCompenent'
+
 
 const ActivityDashbord: React.FC = () => {
-
     const activityStore = useContext(ActivityStore);
-    const{editMode,selectedActivity} = activityStore;
+
+
+    useEffect(()=>{
+    activityStore.loadActivities();
+    },[activityStore]);
+    
+      if(activityStore.loadingInitial)return<LoadingCompenent content='Loading Activities'/>;
+
+  
     return (
         <Grid>
             <Grid.Column width={10}> 
-            <ActivityList  /*handelDeleteActivities={handelDeleteActivities} submitting={submitting} target={target}*/ />
+            <ActivityList  />
          
             </Grid.Column>
             <Grid.Column width={6}>
-                {selectedActivity && !editMode &&(
-                <ActivityDetails  /*setEditMode={setEditMode} setSelectedActivity={setSelectedActivity} *//>
-                )}
-              {editMode&&  <ActivityForm key={selectedActivity && selectedActivity.id|| 0}
-             /* setEditMode={setEditMode} */selectedActivity={selectedActivity!}  /*handelEditActivities={handelEditActivities} submitting={submitting}*//>} 
-              
+             
+              <h2>
+                  Activity Filter
+              </h2>
             </Grid.Column>
             </Grid>        
             

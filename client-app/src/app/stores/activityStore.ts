@@ -8,17 +8,48 @@ configure({enforceActions:'always'});
 
 class ActivityStore{
  @observable activityRegistry = new Map();   
-@observable activities:IActivity[] = [];
+
 @observable loadingInitial = false;
 
-@observable selectedActivity : IActivity|undefined ;
-@observable editMode = false;
+@observable selectedActivity : IActivity|null=null ;
+
 @observable submitting = false;
 @observable target = '';
 
 
 @computed get activitiesByDate(){
     return Array.from(this.activityRegistry.values()).sort((a,b)=> Date.parse(a.date)-Date.parse(b.date))
+}
+
+@action clearActivity =()=>{
+    this.selectedActivity= null;
+}
+
+@action loadActivity = async(id:string)=>{
+let activity = this.getActivity(id);
+if(activity){
+    this.selectedActivity=activity;
+}else{
+   this.loadingInitial=true;
+   try{
+activity = await agent.Activities.details(id);
+runInAction('Getting Activity',()=>{
+    this.selectedActivity=activity;
+    this.loadingInitial=false;
+})
+   } catch(error){
+       runInAction('Getting Actrivity Error',()=>{
+
+ this.loadingInitial=false;
+       })
+       console.log(error)
+   }
+}
+
+}
+
+getActivity=(id:string)=>{
+    return this.activityRegistry.get(id);
 }
 
 @action loadActivities = async ()=>{
@@ -64,8 +95,7 @@ try
  await agent.Activities.create(activity);
  runInAction('Creating Activity',()=>{
     this.activityRegistry.set(activity.id,activity);
-    // this.activities.push(activity);
-     this.editMode=false;
+  
      this.submitting=false;
  })
 
@@ -80,14 +110,14 @@ catch(error)
 }
 
 @action openCreateForm =()=>{
-    this.editMode=true;
-    this.selectedActivity=undefined;
+   // this.editMode=true;
+    this.selectedActivity=null;
 
 }
 
 @action selectActivity =(id:string)=>{
     this.selectedActivity=this.activityRegistry.get(id);
-    this.editMode=false;
+  //  this.editMode=false;
 }
 
 @action editActivity=async(activity:IActivity)=>{
@@ -97,7 +127,7 @@ this.submitting=true;
         runInAction('Editing Activity',()=>{
             this.activityRegistry.set(activity.id,activity);
             this.selectedActivity=activity;
-            this.editMode=false;
+          
             this.submitting=false;
     
         })
@@ -114,17 +144,15 @@ this.submitting=true;
 }
 @action openEditForm = (id:string)=>{
     this.selectedActivity=this.activityRegistry.get(id);
-    this.editMode=true;
+   // this.editMode=true;
 }
 
 @action cancelSelectedActivity=()=>{
-    this.selectedActivity=undefined;
+    this.selectedActivity=null;
 
 }
 
-@action cancelFormOpen=()=>{
-    this.editMode=false;
-}
+
 
 @action deleteActivity=async (event:SyntheticEvent<HTMLButtonElement> ,id:string)=>{
 this.submitting=true;
@@ -132,14 +160,20 @@ this.target=event.currentTarget.name;
 
 try{
     await agent.Activities.delete(id);
-    this.activityRegistry.delete(id);
-    this.submitting=false;
-    this.target='';
+    runInAction('Deleting Activity',()=>{
+        this.activityRegistry.delete(id);
+        this.submitting=false;
+        this.target='';
+    })
+ 
 }
 catch(error){
 console.log(error);
-this.submitting=false;
-this.target='';
+runInAction('error deleting Activity',()=>{
+    this.submitting=false;
+    this.target='';
+})
+
 }
 
 }
