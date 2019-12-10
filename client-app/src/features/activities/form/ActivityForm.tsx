@@ -1,5 +1,5 @@
 import React,{useState,FormEvent, useContext, useEffect} from 'react'
-import { Segment, Form, Button } from 'semantic-ui-react'
+import { Segment, Form, Button, Grid } from 'semantic-ui-react'
 import { IActivity } from '../../../app/models/Activity'
 import {v4 as uuid} from 'uuid';
 import ActivityStore from'../../../app/stores/activityStore'
@@ -16,29 +16,6 @@ const ActivityForm:React.FC<RouteComponentProps<DetailParm>> = ({match,history})
         const activityStore = useContext(ActivityStore);
         const{createActivity,editActivity,submitting,selectedActivity,loadActivity,clearActivity} = activityStore;
 
-
-
-      
-
-  /*  const initializeForm = () => {
-        if(selectedActivity)
-        {
-            return selectedActivity;
-         }
-            else{
- return{
-     id:'',
-     title:'',
-     category:'',
-     description:'',
-     date:'',
-     city:'',
-     venue:''
- };
-            }
-        }*/
-    
-    
    const[activity,setActivity]=useState<IActivity>({
     id:'',
     title:'',
@@ -80,7 +57,9 @@ const handelSubmit=()=>{
 }
 
     return (
-       <Segment clearing>
+        <Grid>
+            <Grid.Column width={10}>
+            <Segment clearing>
            <Form onSubmit={handelSubmit}>
                <Form.Input placeholder='Title' name='title' value={activity.title} onChange={handelInputChange}/>
                <Form.TextArea rows={2} placeholder='Description' name='description'  value={activity.description} onChange={handelInputChange} />
@@ -94,6 +73,9 @@ const handelSubmit=()=>{
                
            </Form>
        </Segment>
+            </Grid.Column>
+        </Grid>
+     
     )
 }
 
