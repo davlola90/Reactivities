@@ -53,7 +53,7 @@ runInAction('Getting Activity',()=>{
 
  this.loadingInitial=false;
        })
-       console.log(error)
+     // console.log(error);
    }
 }
 
@@ -80,7 +80,7 @@ getActivity=(id:string)=>{
       this.loadingInitial=false;
     }
     catch(error){
-        console.log(error);
+      //  console.log(error);
         runInAction('load activities error',()=>{
             this.loadingInitial=false;
         })
@@ -116,7 +116,7 @@ catch(error)
     this.submitting=false;
 })
    
-    console.log(error);
+  //  console.log(error);
 }
 }
 
@@ -149,7 +149,7 @@ this.submitting=true;
             this.submitting=false;
         })
        
-        console.log(error);
+     //   console.log(error);
     }
 
 }
@@ -179,7 +179,7 @@ try{
  
 }
 catch(error){
-console.log(error);
+//console.log(error);
 runInAction('error deleting Activity',()=>{
     this.submitting=false;
     this.target='';
