@@ -1,6 +1,6 @@
 import React,{useState, useContext, useEffect} from 'react'
 import { Segment, Form, Button, Grid } from 'semantic-ui-react'
-import { IActivity } from '../../../app/models/Activity'
+import { IActivity, IActivityFormValues } from '../../../app/models/Activity'
 
 import ActivityStore from'../../../app/stores/activityStore'
 import { observer } from 'mobx-react-lite';
@@ -10,6 +10,8 @@ import TextInput from '../../../app/common/form/TextInput';
 import TextAreaInput from '../../../app/common/form/TextAreaInput';
 import SelectInput from '../../../app/common/form/SelectInput';
 import { category } from '../../../app/common/options/categoryOptions';
+import DateInput from '../../../app/common/form/DateInput';
+import { commbineDateAndTime } from '../../../app/common/utils/util';
 
 
 interface DetailParm{
@@ -21,24 +23,25 @@ const ActivityForm:React.FC<RouteComponentProps<DetailParm>> = ({match,history})
         const activityStore = useContext(ActivityStore);
         const{createActivity,editActivity,submitting,selectedActivity,loadActivity,clearActivity} = activityStore;
 
-   const[activity,setActivity]=useState<IActivity>({
-    id:'',
+   const[activity,setActivity]=useState<IActivityFormValues>({
+    id:undefined,
     title:'',
     category:'',
     description:'',
-    date:'',
+    date:undefined,
+    time:undefined,
     city:'',
     venue:''
 });
 useEffect(()=>{
-    if(match.params.id && activity.id.length===0){
+    if(match.params.id && activity.id){
         loadActivity(match.params.id)
         .then(()=>selectedActivity&&setActivity(selectedActivity));
     }
     return () =>{
         clearActivity()
     }
-            },[loadActivity,clearActivity,match.params.id,selectedActivity,activity.id.length])
+            },[loadActivity,clearActivity,match.params.id,selectedActivity,activity.id])
 
   //const handelInputChange = (event:FormEvent<HTMLInputElement|HTMLTextAreaElement>)  => {
      //  setActivity({...activity,[event.currentTarget.name]:event.currentTarget.value})
@@ -62,7 +65,11 @@ useEffect(()=>{
 }*/
 
 const handelFinalFormSubmit = (values:any)=>{
-    console.log(values);
+    const dateAndTime = commbineDateAndTime(values.date,values.time)
+  
+   const{date,time,...activity}=values;
+   activity.date=dateAndTime;
+    console.log(activity);
 };
 
     return (
@@ -92,13 +99,25 @@ const handelFinalFormSubmit = (values:any)=>{
                       component={SelectInput}
                       options={category}
                      />
-                    <Field
-                    type='datetime-local' 
-                    placeholder='Date'
-                     value={activity.date} 
-                     component={TextInput}
-                     name='date' 
-                     />
+                     <Form.Group widths='equal'>
+                     <Field
+                   
+                   placeholder='Date'
+                    value={activity.date} 
+                    component={DateInput}
+                    name='date'
+                    date={true} 
+                    />
+                      <Field
+                   
+                   placeholder='Time'
+                    value={activity.time} 
+                    component={DateInput}
+                    name='time' 
+                    time={true}
+                    />
+                     </Form.Group>
+                  
                     <Field
                     placeholder='City'
                      value={activity.city} 
