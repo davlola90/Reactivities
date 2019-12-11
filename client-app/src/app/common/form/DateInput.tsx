@@ -26,6 +26,9 @@ const DateInput:React.FC<IProps> = ({
        time={time}
         placeholder={placeholder}
         onChange={input.onChange}
+        onBlur={input.onBlur}
+        onKeyDown={(e)=>e.preventDefault()}
+
         />
         {touched && error && (
             <Label basic color='red'>

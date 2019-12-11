@@ -24,6 +24,7 @@ axios.interceptors.response.use(undefined, error => {
     if(status===500){
         toast.error('Server Error ---cheack the terminal for more Info!!!')
     }
+    throw error;
 })
 
 
