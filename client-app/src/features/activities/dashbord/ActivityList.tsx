@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite'
 import ActivityStore from'../../../app/stores/activityStore';
 
 import ActivityListItem from './ActivityListItem';
+import { RootStoreContext } from '../../../app/stores/rootStore';
 
 /*interface IProps{
    
@@ -13,8 +14,11 @@ import ActivityListItem from './ActivityListItem';
     target:string;
 }*/
 const ActivityList: React.FC = ({/*handelDeleteActivities,submitting,target*/}) => {
-  const activityStore = useContext(ActivityStore);
-  const {activitiesByDate}=activityStore;
+
+  const rootStore = useContext(RootStoreContext);
+  const {activitiesByDate} = rootStore.activityStore;
+  
+  
 
     return (
 
