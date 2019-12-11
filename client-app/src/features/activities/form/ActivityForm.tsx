@@ -34,14 +34,13 @@ const ActivityForm:React.FC<RouteComponentProps<DetailParm>> = ({match,history})
     venue:''
 });
 useEffect(()=>{
-    if(match.params.id && activity.id){
+    if(match.params.id){
         loadActivity(match.params.id)
-        .then(()=>selectedActivity&&setActivity(selectedActivity));
+        .then(
+            (activity)=>setActivity(activity)
+            );
     }
-    return () =>{
-        clearActivity()
-    }
-            },[loadActivity,clearActivity,match.params.id,selectedActivity,activity.id])
+            },[loadActivity,match.params.id]);
 
   //const handelInputChange = (event:FormEvent<HTMLInputElement|HTMLTextAreaElement>)  => {
      //  setActivity({...activity,[event.currentTarget.name]:event.currentTarget.value})

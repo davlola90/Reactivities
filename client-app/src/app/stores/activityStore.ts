@@ -40,6 +40,7 @@ return Object.entries(sortedActivities.reduce((activities,activity)=>{
 let activity = this.getActivity(id);
 if(activity){
     this.selectedActivity=activity;
+    return activity;
 }else{
    this.loadingInitial=true;
    try{
@@ -49,6 +50,7 @@ runInAction('Getting Activity',()=>{
     this.selectedActivity=activity;
     this.loadingInitial=false;
 })
+return activity;
    } catch(error){
        runInAction('Getting Actrivity Error',()=>{
 
