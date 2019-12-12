@@ -22,7 +22,7 @@ axios.interceptors.response.use(undefined, error => {
     }
     
     const{status,data,config} = error.response;
-    console.log(error.message);
+    //console.log(error.message);
    
    if( status === 404){
        history.push('/notFound404');
@@ -58,6 +58,8 @@ const Activities = {
     create :(activity:IActivity)=>requests.post('/activities',activity),
     update :(activity:IActivity)=>requests.put(`/activities/${activity.id}`,activity),
     delete:(id:string) => requests.del(`/activities/${id}`),
+    attend:(id:string)=> requests.post(`/activities/${id}/attend`,{}),
+    unattend:(id:string)=> requests.del(`/activities/${id}/attend`)
 
 }
 
