@@ -6,6 +6,7 @@ import ActivityStore from'../../../app/stores/activityStore';
 
 import ActivityListItem from './ActivityListItem';
 import { RootStoreContext } from '../../../app/stores/rootStore';
+import {format} from 'date-fns'
 
 /*interface IProps{
    
@@ -26,7 +27,7 @@ const ActivityList: React.FC = ({/*handelDeleteActivities,submitting,target*/}) 
         {activitiesByDate.map(([group,activities])=>(
  <Fragment>
 <Label size='large' color='blue'>
-  {group}
+  {format(group,'eeee do MMMM')}
 </Label>
 
         <Item.Group divided>
