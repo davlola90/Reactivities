@@ -15,6 +15,7 @@ export default class ProfileStore {
   @observable loadingProfile = true;
   @observable uploadingPhoto = false;
   @observable loading = false;
+  @observable profLoding=false;
 
   @computed get isCurrentUser() {
     if (this.rootStore.userStore.user && this.profile) {
@@ -105,4 +106,25 @@ runInAction(()=>{
       })
     }
   };
+
+  @action updateProfile = async (profile:Partial<IProfile>)=>{
+    console.log(profile);
+    try{
+await agent.Profile.updateProfile(profile);
+      runInAction(()=>{
+       
+       if(profile.displayName !== this.rootStore.userStore.user!.displayName){
+         this.rootStore.userStore.user!.displayName=profile.displayName!;
+       }
+       this.profile={...this.profile!,...profile};
+      })
+
+    }catch(error){
+      toast.error('Probleme updating Profile');
+      runInAction(()=>{
+        this.loading=false;
+      })
+
+    }
+  }
 }

@@ -20,7 +20,7 @@ const ProfileHeader:React.FC<IProps> = ({profile}) => {
                 src={profile.image||'/assets/user.png'}
               />
               <Item.Content verticalAlign='middle'>
-                <Header as='h1'>{profile.dislayName}</Header>
+                <Header as='h1'>{profile.displayName}</Header>
               </Item.Content>
             </Item>
           </Item.Group>
