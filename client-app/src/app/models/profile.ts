@@ -1,15 +1,18 @@
-export interface IProfile{
-  
-   displayName:string,
-    userName:string,
-    image:string,
-      bio:string,
+export interface IProfile {
+  displayName: string;
+  userName: string;
+  image: string;
+  bio: string;
 
-      photos:IPhoto[]
+  photos: IPhoto[];
+  following:Boolean;
+  followersCount:number;
+  followingCount:number;
+
 }
 
-export interface IPhoto{
-    id:string,
-    url:string,
-    isMain:Boolean
+export interface IPhoto {
+  id: string;
+  url: string;
+  isMain: Boolean;
 }

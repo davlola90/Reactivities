@@ -9,5 +9,7 @@ namespace Application.Activities
 
            public bool IsHost { get; set; }
 
+           public bool Following { get; set; }
+
     }
 }
