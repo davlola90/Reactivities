@@ -57,18 +57,21 @@ useEffect(()=>{
             },[loadActivity,match.params.id]);
 
 const handelFinalFormSubmit = (values:any)=>{
+    alert(values.time)
     const dateAndTime = commbineDateAndTime(values.date,values.time)
-  
+    alert(dateAndTime)
    const{date,time,...activity}=values;
    activity.date=dateAndTime;
    if(!activity.id){
     let newActivity={
         ...activity,id:uuid()
     }
+  
     createActivity(newActivity);
 
  }
  else{
+    alert(activity.date)
   editActivity(activity);
  }
 };
